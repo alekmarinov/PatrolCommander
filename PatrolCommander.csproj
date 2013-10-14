@@ -1,0 +1,248 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.20506</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{6A3F0673-D33F-4549-BCC3-96E948F67942}</ProjectGuid>
+    <ProjectTypeGuids>{C089C8C0-30E0-4E22-80C0-CE093F111A43};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>PatrolCommander</RootNamespace>
+    <AssemblyName>PatrolCommander</AssemblyName>
+    <TargetFrameworkIdentifier>WindowsPhone</TargetFrameworkIdentifier>
+    <TargetFrameworkVersion>v8.0</TargetFrameworkVersion>
+    <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
+    <SilverlightApplication>true</SilverlightApplication>
+    <SupportedCultures>
+    </SupportedCultures>
+    <XapOutputs>true</XapOutputs>
+    <GenerateSilverlightManifest>true</GenerateSilverlightManifest>
+    <XapFilename>PatrolCommander_$(Configuration)_$(Platform).xap</XapFilename>
+    <SilverlightManifestTemplate>Properties\AppManifest.xml</SilverlightManifestTemplate>
+    <SilverlightAppEntry>PatrolCommander.App</SilverlightAppEntry>
+    <ValidateXaml>true</ValidateXaml>
+    <MinimumVisualStudioVersion>11.0</MinimumVisualStudioVersion>
+    <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>Bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;TRACE;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>Bin\Release</OutputPath>
+    <DefineConstants>TRACE;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>Bin\x86\Debug</OutputPath>
+    <DefineConstants>DEBUG;TRACE;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>Bin\x86\Release</OutputPath>
+    <DefineConstants>TRACE;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|ARM' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>Bin\ARM\Debug</OutputPath>
+    <DefineConstants>DEBUG;TRACE;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|ARM' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>Bin\ARM\Release</OutputPath>
+    <DefineConstants>TRACE;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Common\ActionButton.cs" />
+    <Compile Include="Common\AutoPilot.cs" />
+    <Compile Include="Common\Battery.cs" />
+    <Compile Include="Common\DisplayMessage.cs" />
+    <Compile Include="Common\DroneCompass.cs" />
+    <Compile Include="Common\Altitude.cs" />
+    <Compile Include="Common\Drone.cs" />
+    <Compile Include="Common\FlightTracker.cs" />
+    <Compile Include="Common\Manipulator.cs" />
+    <Compile Include="Common\MissionManager.cs" />
+    <Compile Include="Common\NavigationCommand.cs" />
+    <Compile Include="Common\PhoneCompass.cs" />
+    <Compile Include="Common\Polar.cs" />
+    <Compile Include="Common\Sensors.cs" />
+    <Compile Include="Common\TrajectoryRenderer.cs" />
+    <Compile Include="Common\Wifi.cs" />
+    <Compile Include="ReviewBugger.cs" />
+    <Compile Include="ScreenElement.cs" />
+    <Compile Include="LocalizedStrings.cs" />
+    <Compile Include="Logger.cs" />
+    <Compile Include="Main.xaml.cs">
+      <DependentUpon>Main.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Model\DroneModel.cs" />
+    <Compile Include="Model\MissionItem.cs" />
+    <Compile Include="Model\SettingsModel.cs" />
+    <Compile Include="Model\ViewModel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Resources\AppResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AppResources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="ScreenManager.cs" />
+    <Compile Include="DroneInputProvider.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </ApplicationDefinition>
+    <Page Include="Main.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+    <None Include="Properties\AppManifest.xml">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Properties\WMAppManifest.xml">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\Buttons\Settings_push.png" />
+    <Content Include="Assets\ApplicationBackground.png" />
+    <Content Include="Assets\ApplicationIcon.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Buttons\ButtonNewMission.png" />
+    <Content Include="Assets\Buttons\ButtonNewMission_push.png" />
+    <Content Include="Assets\Buttons\Camera.png" />
+    <Content Include="Assets\Buttons\Camera_push.png" />
+    <Content Include="Assets\Buttons\Continue.png" />
+    <Content Include="Assets\Buttons\Continue_push.png" />
+    <Content Include="Assets\Buttons\emergency.png" />
+    <Content Include="Assets\Buttons\Emergency_push.png" />
+    <Content Include="Assets\Buttons\Land.png" />
+    <Content Include="Assets\Buttons\Land_push.png" />
+    <Content Include="Assets\Buttons\off.png" />
+    <Content Include="Assets\Buttons\on.png" />
+    <Content Include="Assets\Buttons\Pause.png" />
+    <Content Include="Assets\Buttons\Pause_push.png" />
+    <Content Include="Assets\Buttons\Settings.png" />
+    <Content Include="Assets\Buttons\TakeOff.png" />
+    <Content Include="Assets\Buttons\TakeOff_push.png" />
+    <Content Include="Assets\Buttons\Take_Photo.png" />
+    <Content Include="Assets\Buttons\Take_Photo_push.png" />
+    <Content Include="Assets\Cockpit\ARDrone.png" />
+    <Content Include="Assets\Cockpit\Battery.png" />
+    <Content Include="Assets\Cockpit\BigHandle.png" />
+    <Content Include="Assets\Cockpit\BigHandlePushed.png" />
+    <Content Include="Assets\Cockpit\BottomStopper.png" />
+    <Content Include="Assets\Cockpit\Calibrate.png" />
+    <Content Include="Assets\Cockpit\ClockBkg.png" />
+    <Content Include="Assets\Cockpit\Compass.png" />
+    <Content Include="Assets\Cockpit\Directions.png" />
+    <Content Include="Assets\Cockpit\Handle.png" />
+    <Content Include="Assets\Cockpit\HandlePushed.png" />
+    <Content Include="Assets\Cockpit\Header.png" />
+    <Content Include="Assets\Cockpit\HorizontalCompass.png" />
+    <Content Include="Assets\Cockpit\HorizontalMarker.png" />
+    <Content Include="Assets\Cockpit\LeftStopper.png" />
+    <Content Include="Assets\Cockpit\RightStopper.png" />
+    <Content Include="Assets\Cockpit\TopStopper.png" />
+    <Content Include="Assets\Cockpit\VerticalMarker.png" />
+    <Content Include="Assets\Cockpit\VerticalMeter.png" />
+    <Content Include="Assets\Missions\WhiteBoard.png" />
+    <Content Include="Assets\Tiles\FlipCycleTileLarge.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Tiles\FlipCycleTileMedium.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Tiles\FlipCycleTileSmall.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Tiles\IconicTileMediumLarge.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\Tiles\IconicTileSmall.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="README_FIRST.txt" />
+    <Content Include="SplashScreenImage.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\AppResources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AppResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="ARDrone2.Client.WP8">
+      <HintPath>..\..\ARDrone2SDK\ARDrone2.Client.WP8\Bin\ARM\Release\ARDrone2.Client.WP8.dll</HintPath>
+    </Reference>
+    <Reference Include="ARDrone2VideoTcpWrapper">
+      <HintPath>..\..\ARDrone2SDK\ARM\Release\ARDrone2VideoTcpWrapper\ARDrone2VideoTcpWrapper.winmd</HintPath>
+    </Reference>
+    <Reference Include="Coding4Fun.Phone.Controls">
+      <HintPath>..\packages\Coding4Fun.Phone.Controls.1.4.8\lib\Coding4Fun.Phone.Controls.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Phone.Controls, Version=8.0.0.0, Culture=neutral, PublicKeyToken=24eec0d8c86cda1e, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Phone.Controls.Toolkit">
+      <HintPath>..\packages\WPtoolkit.4.2013.08.16\lib\wp8\Microsoft.Phone.Controls.Toolkit.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Toolkit.Content\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).$(TargetFrameworkVersion).Overrides.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ProjectExtensions />
+</Project>

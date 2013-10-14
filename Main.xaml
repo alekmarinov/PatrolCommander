@@ -1,0 +1,521 @@
+﻿<phone:PhoneApplicationPage
+    x:Class="PatrolCommander.Main"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:phone="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone"
+    xmlns:shell="clr-namespace:Microsoft.Phone.Shell;assembly=Microsoft.Phone"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:toolkit="clr-namespace:Microsoft.Phone.Controls;assembly=Microsoft.Phone.Controls.Toolkit"
+    FontFamily="{StaticResource PhoneFontFamilyNormal}"
+    FontSize="{StaticResource PhoneFontSizeNormal}"
+    Foreground="{StaticResource PhoneForegroundBrush}"
+    SupportedOrientations="Landscape"
+    Orientation="LandscapeLeft"
+    OrientationChanged="OnOrientationChanged"
+    mc:Ignorable="d"
+    shell:SystemTray.IsVisible="false"
+    BackKeyPress="PhoneApplicationPage_BackKeyPress"
+    Loaded="MainLoaded"
+    Unloaded="MainUnloaded"
+    >
+
+    <!--LayoutRoot is the root grid where all page content is placed-->
+    <Grid x:Name="LayoutRoot" Background="Transparent">
+        <MediaElement x:Name="video" BufferingTime="00:00:00.0"/>
+        <Image x:Name="Splash" Source="/Assets/Cockpit/CameraView.png" Visibility="Collapsed"/>
+
+        <!-- LaunchPad -->
+        <Grid x:Name="LaunchPad" Visibility="Collapsed">
+            <Grid.Background>
+                <ImageBrush ImageSource="/Assets/ApplicationBackground.png"/>
+            </Grid.Background>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!-- LOCALIZATION NOTE:
+            To localize the displayed strings copy their values to appropriately named
+            keys in the app's neutral language resource file (AppResources.resx) then
+            replace the hard-coded text value between the attributes' quotation marks
+            with the binding clause whose path points to that string name.
+
+            For example:
+
+                Text="{Binding Path=LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}"
+
+            This binding points to the template's string resource named "ApplicationTitle".
+
+            Adding supported languages in the Project Properties tab will create a
+            new resx file per language that can carry the translated values of your
+            UI strings. The binding in these examples will cause the value of the
+            attributes to be drawn from the .resx file that matches the
+            CurrentUICulture of the app at run time.
+         -->
+
+            <!--TitlePanel contains the name of the application and page title-->
+
+            <Grid x:Name="TitlePanelLaunchPad" Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.ColumnSpan="2" Text="{Binding Path=LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextTitle2Style}" VerticalAlignment="Center" FontWeight="Bold" />
+
+                <StackPanel Orientation="Horizontal" Grid.Row="2">
+                    <TextBlock x:Name="PageTitleLaunchPad" Text="{Binding Path=LocalizedResources.PageTitleMissions, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextTitle2Style}" TextAlignment="Left"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,10,0">
+                    <!-- 
+                    <Grid HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="Collapsed">
+                        <Image x:Name="Wifi4" Source="/Assets/Cockpit/Wifi/Wifi_4.png" Stretch="None"/>
+                        <Image x:Name="Wifi3" Source="/Assets/Cockpit/Wifi/Wifi_3.png" Stretch="None"/>
+                        <Image x:Name="Wifi2" Source="/Assets/Cockpit/Wifi/Wifi_2.png" Stretch="None"/>
+                        <Image x:Name="Wifi1" Source="/Assets/Cockpit/Wifi/Wifi_1.png" Stretch="None"/>
+                        <Image x:Name="Wifi0" Source="/Assets/Cockpit/Wifi/Wifi_0.png" Stretch="None"/>
+                    </Grid>
+                    -->
+                    <TextBlock x:Name="WifiNameLaunchPad" Padding="5"/>
+                </StackPanel>
+            </Grid>
+
+            <!--ContentPanel - place additional content here-->
+            <Grid x:Name="ContentPanel" Grid.Row="1" Margin="12,0,12,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <ScrollViewer x:Name="ScrollViewer">
+                    <ItemsControl x:Name="ItemsControlMissions" ItemsSource="{Binding MissionItems}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <toolkit:WrapPanel Name="WrapPanel" ItemWidth="151" ItemHeight="130"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Vertical">
+                                    <Image Width="140" Height="120" Source="{Binding ImageSource}" Tap="MissionStart_Tap" Tag="{Binding Tag}">
+                                        <toolkit:ContextMenuService.ContextMenu>
+                                            <toolkit:ContextMenu>
+                                                <toolkit:MenuItem Header="start" Click="MissionStart_Click" CommandParameter="{Binding Tag}"/>
+                                                <toolkit:MenuItem Header="delete" Click="MissionDelete_Click" CommandParameter="{Binding Tag}"/>
+                                            </toolkit:ContextMenu>
+                                        </toolkit:ContextMenuService.ContextMenu>
+                                    </Image>
+                                    <TextBlock Text="{Binding Title}" Margin="10,-20,0,0"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+                <!--
+            <StackPanel Grid.Row="1">
+                <Image Source="/Assets/Buttons/ButtonNewMission.png" Stretch="None" HorizontalAlignment="Center" Tap="NewMission_Tap"></Image>
+                <TextBlock Text="{Binding Path=LocalizedResources.ButtonNewMission, Source={StaticResource LocalizedStrings}}" HorizontalAlignment="Center">
+                </TextBlock>
+            </StackPanel>
+-->
+                <StackPanel x:Name="ButtonsPanel" Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Grid>
+                        <Image x:Name="NewMission" Source="/Assets/Buttons/ButtonNewMission.png" Stretch="None" />
+                        <Image x:Name="NewMissionPushed" Source="/Assets/Buttons/ButtonNewMission_push.png" Stretch="None" Visibility="Collapsed" />
+                    </Grid>
+                    <Grid>
+                        <Image x:Name="SettingsButton" Source="/Assets/Buttons/Settings.png" Stretch="None" />
+                        <Image x:Name="SettingsButtonPushed" Source="/Assets/Buttons/Settings_push.png" Stretch="None" Visibility="Collapsed" />
+                    </Grid>
+                </StackPanel>
+            </Grid>
+
+            <Grid x:Name="TrialMessage" Grid.Row="1" Height="200" Width="600" Visibility="Collapsed">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="This is a trial version. Buying this application will support its continued development." TextWrapping="Wrap"></TextBlock>
+                <StackPanel Grid.Row="1" HorizontalAlignment="Center" Orientation="Horizontal">
+                    <Button Content="Try" Click="Button_ClickTry"/>
+                    <Button Content="Buy" Click="Button_ClickBuy"/>
+                </StackPanel>
+            </Grid>
+
+            <Grid x:Name="RateMessage" Grid.Row="1" Height="200" Width="600" Visibility="Collapsed">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <TextBlock 
+                    Text="If you enjoyed this app, please take a moment to rate us in the Store. Your feedback is greatly appreciated." 
+                    TextWrapping="Wrap"></TextBlock>
+                <StackPanel Grid.Row="1" HorizontalAlignment="Center" Orientation="Horizontal">
+                    <Button Content="Rate" Click="Button_ClickRate"/>
+                    <Button Content="Not now" Click="Button_ClickTry"/>
+                </StackPanel>
+            </Grid>
+
+        </Grid>
+
+        <!--Cockpit -->
+        <Grid x:Name="Cockpit" Background="Transparent" Visibility="Visible">
+            <Grid Background="Transparent">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid Grid.ColumnSpan="2" Grid.Row="0" Grid.Column="1">
+                    <Image Source="/Assets/Cockpit/Header.png" Stretch="None"/>
+                    <Image x:Name="HorizontalCompass" 
+                    Source="/Assets/Cockpit/HorizontalCompass.png" 
+                    Stretch="None" 
+                    Margin="-305,0,0,0"
+                    Visibility="Visible">
+                        <Image.Clip>
+                            <RectangleGeometry Rect="305, 0, 580, 100"/>
+                        </Image.Clip>
+                    </Image>
+                    <Grid HorizontalAlignment="Right" Margin="0,-50,0,0">
+                        <Image Source="/Assets/Cockpit/ClockBkg.png" Stretch="None"/>
+                        <TextBlock x:Name="TimeText" Text="00:00.000" Margin="0,0,0,0" VerticalAlignment="Center" TextAlignment="Center"/>
+                    </Grid>
+
+                    <Image x:Name="CompassZero" Source="/Assets/Cockpit/HorizontalMarker.png" Stretch="None" 
+                       Margin="-100,50,0,-50" Visibility="Visible"/>
+
+                    <Image x:Name="CompassHandlerShadow" Source="/Assets/Cockpit/Handle.png" CacheMode="BitmapCache" 
+                    Stretch="None" Margin="-100,40,0,0" Visibility="Collapsed" Opacity="0.5"/>
+                    <Image x:Name="CompassHandler" Source="/Assets/Cockpit/Handle.png" CacheMode="BitmapCache" 
+                    ManipulationDelta="Compass_ManipulationDelta" ManipulationCompleted="Compass_ManipulationCompleted" Stretch="None" 
+                    Margin="-100,40,0,0" Visibility="Visible"/>
+                    <Image x:Name="CompassHandlerPushed" Source="/Assets/Cockpit/HandlePushed.png" CacheMode="BitmapCache" Stretch="None" 
+                    Margin="-100,40,0,0" Visibility="Collapsed" />
+
+                    <Image x:Name="CompassMinHandler" Source="/Assets/Cockpit/LeftStopper.png" Stretch="None" HorizontalAlignment="Left" Margin="55,35,0,0" Visibility="Collapsed"/>
+                    <Image x:Name="CompassMaxHandler" Source="/Assets/Cockpit/RightStopper.png" Stretch="None" HorizontalAlignment="Right" Margin="0,35,160,0" Visibility="Collapsed"/>
+                </Grid>
+
+                <StackPanel Orientation="Horizontal" Margin="10,-50,0,0">
+                    <Grid>
+                        <Image x:Name="BatteryImage" Source="/Assets/Cockpit/Battery.png" Stretch="None"/>
+                        <Rectangle x:Name="BatteryRect" Fill="Black" Opacity="0.4" Margin="0,64,80,65"/>
+                        <TextBlock x:Name="BatteryText" Text="0%" Margin="0,-3,15,0" VerticalAlignment="Center" HorizontalAlignment="Right"/>
+                    </Grid>
+                    <!--<Grid Visibility="Collapsed">
+                        <Image x:Name="Wifi4" Source="/Assets/Cockpit/Wifi/Wifi_4.png" Stretch="None"/>
+                        <Image x:Name="Wifi3" Source="/Assets/Cockpit/Wifi/Wifi_3.png" Stretch="None"/>
+                        <Image x:Name="Wifi2" Source="/Assets/Cockpit/Wifi/Wifi_2.png" Stretch="None"/>
+                        <Image x:Name="Wifi1" Source="/Assets/Cockpit/Wifi/Wifi_1.png" Stretch="None"/>
+                        <Image x:Name="Wifi0" Source="/Assets/Cockpit/Wifi/Wifi_0.png" Stretch="None"/>
+                    </Grid>-->
+                </StackPanel>
+
+                <Grid Grid.Row="1" Grid.RowSpan="2">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Top">
+                        <Grid>
+                            <Image 
+                            x:Name="AltitudeMeter"
+                            Source="/Assets/Cockpit/VerticalMeter.png" VerticalAlignment="Top"
+                            Margin="0,-3599,0,0"
+                            Visibility="Visible" 
+                            Stretch="None">
+                                <Image.Clip>
+                                    <RectangleGeometry Rect="0, 3599, 110, 350"/>
+                                </Image.Clip>
+                            </Image>
+                            <Image x:Name="AltitudeHandlerShadow" Source="/Assets/Cockpit/Handle.png" CacheMode="BitmapCache" Stretch="None" Margin="50,0,0,0" Visibility="Collapsed"
+                                Opacity="0.5"/>
+                            <Image x:Name="AltitudeHandler" Source="/Assets/Cockpit/Handle.png" CacheMode="BitmapCache" Stretch="None" Margin="50,0,0,0" Visibility="Visible"
+                               ManipulationDelta="Altitude_ManipulationDelta" ManipulationCompleted="Altitude_ManipulationCompleted" />
+                            <Image x:Name="AltitudeHandlerPushed" Source="/Assets/Cockpit/HandlePushed.png" CacheMode="BitmapCache" Stretch="None" Margin="50,0,0,0" Visibility="Collapsed" />
+                        </Grid>
+                        <Image x:Name="AltitudeZero" Visibility="Visible" Source="/Assets/Cockpit/VerticalMarker.png" Stretch="None" Margin="0,0,0,0" Canvas.ZIndex="-1"/>
+                    </StackPanel>
+
+                    <Image x:Name="AltitudeMaxHandler" Source="/Assets/Cockpit/TopStopper.png" Stretch="None" VerticalAlignment="Top" Margin="47,17,0,0" Visibility="Collapsed"/>
+                    <Image x:Name="AltitudeMinHandler" Source="/Assets/Cockpit/BottomStopper.png" Stretch="None" VerticalAlignment="Bottom" Margin="47,0,0,17" Visibility="Collapsed"/>
+                </Grid>
+
+                <Grid Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2">
+                    <Canvas x:Name="TrajectoryCanvas" 
+                        HorizontalAlignment="Left" 
+                        VerticalAlignment="Top" 
+                        RenderTransformOrigin="0,0"
+                        Width="20"
+                        Height="10"
+                        >
+                        <!--<Rectangle Width="20" Height="10" Fill="DarkBlue"></Rectangle>-->
+                    </Canvas>
+                    <StackPanel Orientation="Horizontal">
+                        <Grid Width="550" Margin="-20,0,0,-40">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="173*"/>
+                                <RowDefinition Height="18*"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock
+                        x:Name="Message1" 
+                        FontSize="24" 
+                        FontWeight="Medium" 
+                        TextWrapping="Wrap" Grid.RowSpan="2"
+                        >
+                                <TextBlock.RenderTransform>
+                                    <CompositeTransform TranslateY="0"/>
+                                </TextBlock.RenderTransform>
+                                <TextBlock.Foreground>
+                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                        <GradientStop Color="#FFE01556" Offset="0.31"/>
+                                        <GradientStop Color="Yellow" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </TextBlock.Foreground>
+
+                            </TextBlock>
+                            <TextBlock
+                        x:Name="Message2" 
+                        FontSize="24" 
+                        FontWeight="Medium" 
+                        TextWrapping="Wrap" Grid.RowSpan="2"
+                        >
+                                <TextBlock.Foreground>
+                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                        <GradientStop Color="#FFE01556" Offset="0.31"/>
+                                        <GradientStop Color="Yellow" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </TextBlock.Foreground>
+                            </TextBlock>
+                            <TextBlock
+                        x:Name="Message3" 
+                        FontSize="24" 
+                        FontWeight="Medium" 
+                        TextWrapping="Wrap" Grid.RowSpan="2"
+                        >
+                                <TextBlock.Foreground>
+                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                        <GradientStop Color="#FFE01556" Offset="0.31"/>
+                                        <GradientStop Color="Yellow" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </TextBlock.Foreground>
+                            </TextBlock>
+                            <TextBlock
+                        x:Name="Message4" 
+                        FontSize="24" 
+                        FontWeight="Medium" 
+                        TextWrapping="Wrap" Grid.RowSpan="2"
+                        >
+                                <TextBlock.Foreground>
+                                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                                        <GradientStop Color="#FFE01556" Offset="0.31"/>
+                                        <GradientStop Color="Yellow" Offset="1"/>
+                                    </LinearGradientBrush>
+                                </TextBlock.Foreground>
+                            </TextBlock>
+
+                        </Grid>
+                        <Image x:Name="DroneIcon" Source="/Assets/Cockpit/ARDrone.png" Stretch="None" Margin="0,0,0,0" HorizontalAlignment="Right" Visibility="Visible"/>
+                    </StackPanel>
+                </Grid>
+
+                <Grid Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Bottom">
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
+                            <Grid>
+                                <Image x:Name="Land_Image"  Source="/Assets/Buttons/Land.png" Stretch="None" />
+                                <Image x:Name="Land_ImagePushed"  Source="/Assets/Buttons/Land_push.png" Stretch="None" Visibility="Collapsed"/>
+                                <Image x:Name="TakeOff_Image"  Source="/Assets/Buttons/TakeOff.png" Stretch="None" />
+                                <Image x:Name="TakeOff_ImagePushed"  Source="/Assets/Buttons/TakeOff_push.png" Stretch="None" Visibility="Collapsed"/>
+                            </Grid>
+                            <TextBlock x:Name="TakeOff_Landing" Text="Take Off" FontFamily="Arial" TextAlignment="Center" FontSize="20"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
+                            <Grid>
+                                <Image x:Name="Continue_Image"  Source="/Assets/Buttons/Continue.png" Stretch="None" />
+                                <Image x:Name="Continue_ImagePushed"  Source="/Assets/Buttons/Continue_push.png" Stretch="None" Visibility="Collapsed"/>
+                                <Image x:Name="Pause_Image"  Source="/Assets/Buttons/Pause.png" Stretch="None" />
+                                <Image x:Name="Pause_ImagePushed"  Source="/Assets/Buttons/Pause_push.png" Stretch="None" Visibility="Collapsed"/>
+                            </Grid>
+                            <TextBlock x:Name="Pause_Continue" Text="Pause" FontFamily="Arial" TextAlignment="Center" FontSize="20"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
+                            <Grid>
+                                <Image x:Name="Camera_Image"  Source="/Assets/Buttons/Camera.png" Stretch="None" />
+                                <Image x:Name="Camera_ImagePushed"  Source="/Assets/Buttons/Camera_push.png" Stretch="None" Visibility="Collapsed"/>
+                            </Grid>
+                            <TextBlock Text="Camera" FontFamily="Arial" TextAlignment="Center" FontSize="20"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Left">
+                            <Grid>
+                                <Image x:Name="Photo_Image"  Source="/Assets/Buttons/Take_Photo.png" Stretch="None" />
+                                <Image x:Name="Photo_ImagePushed"  Source="/Assets/Buttons/Take_Photo_push.png" Stretch="None" Visibility="Collapsed"/>
+                            </Grid>
+                            <TextBlock Text="Photo" FontFamily="Arial" TextAlignment="Center" FontSize="20"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" Margin="30,0,0,0">
+                            <Grid>
+                                <Image x:Name="Emergency_Image"  Source="/Assets/Buttons/Emergency.png" Stretch="None"/>
+                                <Image x:Name="Emergency_ImagePushed"  Source="/Assets/Buttons/Emergency_push.png" Stretch="None" Visibility="Collapsed"/>
+                            </Grid>
+                            <TextBlock x:Name="Emergency" Text="Emergency" FontFamily="Arial" TextAlignment="Center" FontSize="20"/>
+                        </StackPanel>
+                        <StackPanel>
+                            <TextBlock x:Name="X" Width="336"/>
+                            <TextBlock x:Name="Y" Width="336" />
+                        </StackPanel>
+                    </StackPanel>
+                    <Grid Grid.Column="1">
+                        <Image x:Name="Directions" Source="/Assets/Cockpit/Directions.png" Stretch="None"/>
+                        <Image x:Name="DirectionsHandlerShadow" Source="/Assets/Cockpit/BigHandle.png" CacheMode="BitmapCache" 
+                    Stretch="None" Opacity="0.5" Visibility="Collapsed"/>
+                        <Image x:Name="DirectionsHandler" Source="/Assets/Cockpit/BigHandle.png" CacheMode="BitmapCache" 
+                            MouseEnter="Image_MouseEnter" MouseLeave="Image_MouseLeave" 
+                            ManipulationDelta="Directions_ManipulationDelta" ManipulationCompleted="Directions_ManipulationCompleted" Stretch="None" Visibility="Visible"/>
+                        <Image x:Name="DirectionsHandlerPushed" Source="/Assets/Cockpit/BigHandlePushed.png" CacheMode="BitmapCache" Stretch="None" Visibility="Collapsed"/>
+                    </Grid>
+                </Grid>
+
+            </Grid>
+        </Grid>
+
+        <!--Settings -->
+        <Grid x:Name="Settings" Visibility="Collapsed">
+            <Grid.Background>
+                <ImageBrush ImageSource="/Assets/ApplicationBackground.png"/>
+            </Grid.Background>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <!--TitlePanel contains the name of the application and page title-->
+            <Grid x:Name="TitlePanelSettings" Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <TextBlock Grid.ColumnSpan="2" Text="{Binding Path=LocalizedResources.ApplicationTitle, Source={StaticResource LocalizedStrings}}" Style="{StaticResource PhoneTextTitle2Style}" VerticalAlignment="Center" FontWeight="Bold" />
+
+                <StackPanel Orientation="Horizontal" Grid.Row="2">
+                    <TextBlock x:Name="PageTitleSettings" Text="settings" Style="{StaticResource PhoneTextTitle2Style}" TextAlignment="Left"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10,10,0">
+                    <!-- 
+                    <Grid HorizontalAlignment="Left" VerticalAlignment="Top" Visibility="Collapsed">
+                        <Image x:Name="Wifi4" Source="/Assets/Cockpit/Wifi/Wifi_4.png" Stretch="None"/>
+                        <Image x:Name="Wifi3" Source="/Assets/Cockpit/Wifi/Wifi_3.png" Stretch="None"/>
+                        <Image x:Name="Wifi2" Source="/Assets/Cockpit/Wifi/Wifi_2.png" Stretch="None"/>
+                        <Image x:Name="Wifi1" Source="/Assets/Cockpit/Wifi/Wifi_1.png" Stretch="None"/>
+                        <Image x:Name="Wifi0" Source="/Assets/Cockpit/Wifi/Wifi_0.png" Stretch="None"/>
+                    </Grid>
+                        -->
+                    <TextBlock x:Name="WifiNameSettings" Padding="5"/>
+                </StackPanel>
+            </Grid>
+
+            <ScrollViewer HorizontalAlignment="Center" Grid.Row="1">
+                <StackPanel>
+                    <Grid Tap="Tap_PathRecorder">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="350"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Path Recorder" Padding = "15" FontSize="36"/>
+                        <Image Grid.Column="1" Source="{Binding PathRecorderSource}" Stretch="None" HorizontalAlignment="Left" />
+                    </Grid>
+                    <Grid Tap="Tap_TiltToSteer">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="350"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Tilt to steer" Padding = "15" FontSize="36"/>
+                        <Image Grid.Column="1" Source="{Binding TiltToSteerSource}" Stretch="None" HorizontalAlignment="Left" />
+                    </Grid>
+                    <Grid Tap="Tap_SteerRelativeToYou" >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="350"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Steer relative to you" Padding = "15" FontSize="36"/>
+                        <Image Grid.Column="1" Source="{Binding SteerRelativeToYouSource}" Stretch="None" HorizontalAlignment="Left" />
+                    </Grid>
+                    <Button Content="Calibration Flight" Tap="Tap_CalibrationFlight" />
+                    <Grid Tap="Tap_OutdoorHull" Visibility="Collapsed">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="350"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Outdoor Hull" Padding = "15" FontSize="36"/>
+                        <Image Grid.Column="1" Source="{Binding OutdoorHullSource}" Stretch="None" HorizontalAlignment="Left" />
+                    </Grid>
+                    <Grid Tap="Tap_OutdoorFlight" Visibility="Collapsed">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="350"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Text="Outdoor Flight" Padding = "15" FontSize="36"/>
+                        <Image Grid.Column="1" Source="{Binding OutdoorFlightSource}" Stretch="None" HorizontalAlignment="Left" />
+                    </Grid>
+                    <Grid Visibility="Collapsed">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="Max Altitude" Padding = "15" FontSize="36" HorizontalAlignment="Center"/>
+                        <TextBlock x:Name="MinMaxAltitude" HorizontalAlignment="Left" Grid.Row="1" Padding = "15" FontSize="26" VerticalAlignment="Top" Margin="0,-40,0,0"/>
+                        <TextBlock x:Name="MaxMaxAltitude" HorizontalAlignment="Right" Grid.Row="1" Padding = "15" FontSize="26" VerticalAlignment="Top" Margin="0,-40,0,0"/>
+                        <Grid Grid.Column="0" Grid.Row="1" >
+                            <Image x:Name="MaxAltitudeSlider" Source="/Assets/Buttons/SlideBarOn.png" Stretch="None" HorizontalAlignment="Center" />
+                            <Image x:Name="MaxAltitudeHandlePushed" Source="/Assets/Cockpit/HandlePushed.png" Stretch="None" Visibility="Visible" HorizontalAlignment="Left"/>
+                            <Grid x:Name="MaxAltitudeHandle" 
+                                ManipulationDelta="MaxAltitude_ManipulationDelta" ManipulationCompleted="MaxAltitude_ManipulationCompleted"
+                                HorizontalAlignment="Left"
+                                >
+                                <Image Source="/Assets/Cockpit/Handle.png" Stretch="None"/>
+                                <TextBlock x:Name="MaxAltitudeValue" Text="3" TextAlignment="Center" VerticalAlignment="Center"/>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                    <Grid Visibility="Collapsed">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Text="Max Angle Degree" Padding = "15" FontSize="36" HorizontalAlignment="Center"/>
+                        <TextBlock x:Name="MinMaxAngle" HorizontalAlignment="Left" Grid.Row="1" Padding = "15" FontSize="26" VerticalAlignment="Top" Margin="0,-40,0,0"/>
+                        <TextBlock x:Name="MaxMaxAngle" HorizontalAlignment="Right" Grid.Row="1" Padding = "15" FontSize="26" VerticalAlignment="Top" Margin="0,-40,0,0"/>
+                        <Grid Grid.Column="0" Grid.Row="1" >
+                            <Image x:Name="MaxAngleSlider" Source="/Assets/Buttons/SlideBarOn.png" Stretch="None" HorizontalAlignment="Center" />
+                            <Image x:Name="MaxAngleHandlePushed" Source="/Assets/Cockpit/HandlePushed.png" Stretch="None" Visibility="Visible" HorizontalAlignment="Left"/>
+                            <Grid x:Name="MaxAngleHandle"
+                                ManipulationDelta="MaxAngle_ManipulationDelta" ManipulationCompleted="MaxAngle_ManipulationCompleted"
+                                HorizontalAlignment="Left">
+                                <Image Source="/Assets/Cockpit/Handle.png" Stretch="None"/>
+                                <TextBlock x:Name="MaxAngleValue" Text="0" TextAlignment="Center" VerticalAlignment="Center"/>
+                            </Grid>
+                        </Grid>
+                    </Grid>
+                </StackPanel>
+            </ScrollViewer>
+        </Grid>
+    </Grid>
+</phone:PhoneApplicationPage>
